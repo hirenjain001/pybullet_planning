@@ -226,16 +226,28 @@ def plan_joint_motion(body, joints, end_conf, obstacles=[], attachments=[],
     sample_fn = get_sample_fn(body, joints, custom_limits=custom_limits)
     distance_fn = get_distance_fn(body, joints, weights=weights)
     extend_fn = get_extend_fn(body, joints, resolutions=resolutions)
-    collision_fn = get_collision_fn(body, joints, obstacles=obstacles, attachments=attachments, self_collisions=self_collisions,
-                                    disabled_collisions=disabled_collisions, extra_disabled_collisions=extra_disabled_collisions,
-                                    custom_limits=custom_limits, max_distance=max_distance)
+    collision_fn = get_collision_fn(
+        body, joints,
+        obstacles=obstacles,
+        attachments=attachments,
+        self_collisions=self_collisions,
+        disabled_collisions=disabled_collisions,
+        extra_disabled_collisions=extra_disabled_collisions,
+        custom_limits=custom_limits,
+        max_distance=max_distance
+    )
 
     start_conf = get_joint_positions(body, joints)
 
-    if not check_initial_end(start_conf, end_conf, collision_fn, diagnosis=diagnosis):
-        return None
-    return birrt(start_conf, end_conf, distance_fn, sample_fn, extend_fn, collision_fn, **kwargs)
-    #return plan_lazy_prm(start_conf, end_conf, sample_fn, extend_fn, collision_fn)
+    return birrt(
+        start_conf,
+        end_conf,
+        distance_fn,
+        sample_fn,
+        extend_fn,
+        collision_fn,
+        **kwargs
+    )
 
 def plan_lazy_prm(start_conf, end_conf, sample_fn, extend_fn, collision_fn, **kwargs):
     # TODO: cost metric based on total robot movement (encouraging greater distances possibly)
